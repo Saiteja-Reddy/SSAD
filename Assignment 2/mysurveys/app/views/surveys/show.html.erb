@@ -1,0 +1,30 @@
+<div class="container">
+
+<h2 class="center">Showing Survey - <%= @survey.name %></h2>
+
+<% i=0 %>
+<h1> Questions </h1>
+<% if @survey.questions.any? %>
+ 	<% @survey.questions.each do |question| %>
+ 		<% i+=1 %>
+ 		<h4><%= i %>. <%= question.content %></h4>
+ 		<h5>Answers: </h5><br>
+ 		<ul class="collection">
+ 			<% question.answers.each do |answer| %>
+ 			<li class="collection-item"> <%= answer.content %></li>
+ 			<% end %>
+ 		</ul>
+ 		
+ 	<% end %>
+
+<% else %>
+<p>
+<h3 class="center">None Available</h3>
+</p>
+<%end%>
+
+<div class="center">
+<%= link_to 'Edit', edit_survey_path(@survey) ,:class => 'waves-effect waves-light btn center' %>
+<%= link_to 'Back', surveys_path ,:class => 'waves-effect waves-light btn center' %>
+</div>
+</div>

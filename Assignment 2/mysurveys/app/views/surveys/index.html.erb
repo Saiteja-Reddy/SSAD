@@ -1,0 +1,31 @@
+<div class="container">
+
+<h1 class="center">Surveys</h1>
+
+      <table class="highlight bordered responsive-table centered">
+        <thead>
+          <tr>
+              <th>Name</th>
+              <th>Show</th>
+              <th>Edit</th>
+              <th>Delete</th>
+          </tr>
+        </thead>
+  
+  <tbody>
+    <% @surveys.each do |survey| %>
+      <tr>
+        <td><%= survey.name %></td>
+        <td><%= link_to 'Show', survey %> <i class="fa fa-file-text" aria-hidden="true"></i></td>
+        <td><%= link_to 'Edit', edit_survey_path(survey) %> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></td>
+        <td><%= link_to 'Destroy', survey, method: :delete, data: { confirm: 'Are you sure?' } %> <i class="fa fa-trash" aria-hidden="true"></i></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<br>
+<div class="center"><%= link_to 'Create a New Survey', new_survey_path , :class => 'waves-effect waves-light btn center' %></div>
+<br>
+</div>

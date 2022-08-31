@@ -1,0 +1,69 @@
+  <div class="slider">
+    <ul class="slides">
+      <li>
+      <%=image_tag("screen6.jpg")%>
+        <div class="caption center-align">
+          <h3>Welcome to My Surveys</h3>
+          <h5 class="light grey-text text-lighten-3">Sign Up and Start Taking Surveys</h5>
+        </div>
+      </li>
+      <li>
+      <%=image_tag("screen2.jpg")%>
+        <div class="caption left-align">
+          <h3>What you can do</h3>
+          <h5 class="light grey-text text-lighten-3">See all available surveys</h5>
+        </div>
+      </li>
+      <li>
+      <%=image_tag("screen1.jpg")%>
+        <div class="caption right-align">
+          <h3>What you can do</h3>
+          <h5 class="light grey-text text-lighten-3">Answer to existing surveys</h5>
+        </div>
+      </li>
+      <li>
+      <%=image_tag("screen5.jpg")%>
+        <div class="caption center-align">
+          <h3>What you can do</h3>
+          <h5 class="light grey-text text-lighten-3">Keep track of your filled data</h5>
+        </div>
+      </li>
+    </ul>
+  </div>
+      
+   <script>
+       $(document).ready(function(){
+      $('.slider').slider({full_width: true});
+    });
+   </script> 
+   
+<div class="container">
+<div class="center"><h2>Log in</h2></div>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %><br />
+    <%= f.password_field :password, autocomplete: "off" %>
+  </div>
+
+  <% if devise_mapping.rememberable? -%>
+    <div class="field">
+      <%= f.check_box :remember_me %>
+      <%= f.label :remember_me %>
+    </div>
+  <% end -%>
+
+  <div class="actions">
+  <br>
+<%= f.submit 'Log In', :class => 'waves-effect waves-light btn-large' %>
+<br>
+  </div>
+<% end %>
+<br>
+<%= render "devise/shared/links" %>
+</div>

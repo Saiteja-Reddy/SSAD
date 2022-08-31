@@ -1,0 +1,116 @@
+<body>
+
+  <div class="slider">
+    <ul class="slides">
+      <li>
+      <%=image_tag("screen6.jpg")%>
+        <div class="caption center-align">
+          <h3>Welcome to My Surveys</h3>
+          <h5 class="light grey-text text-lighten-3">Take Surveys</h5>
+        </div>
+      </li>
+      <li>
+      <%=image_tag("screen2.jpg")%>
+        <div class="caption left-align">
+          <h3>What you can do</h3>
+          <h5 class="light grey-text text-lighten-3">See all available surveys</h5>
+        </div>
+      </li>
+      <li>
+      <%=image_tag("screen1.jpg")%>
+        <div class="caption right-align">
+          <h3>What you can do</h3>
+          <h5 class="light grey-text text-lighten-3">Answer to existing surveys</h5>
+        </div>
+      </li>
+      <li>
+      <%=image_tag("screen5.jpg")%>
+        <div class="caption center-align">
+          <h3>What you can do</h3>
+          <h5 class="light grey-text text-lighten-3">Keep track of your filled data</h5>
+        </div>
+      </li>
+    </ul>
+  </div>
+      
+   <script>
+       $(document).ready(function(){
+      $('.slider').slider({full_width: true});
+    });
+   </script>   
+<div class="container">
+  <% if notice %>
+   <script>Materialize.toast('<%= notice %>', 4000)</script>
+<% end %>
+
+<h1 class="center">Welcome Back</h1>
+<h3 class="center">Here are all the surveys</h3>
+
+<% colorarr = ["blue-grey darken-1","black","red accent-2","deep-purple accent-4","brown darken-1"] %>
+         <div class="row">
+
+<% @surveysall.each do |survey| %>
+
+        <div class="col s12 m6">
+          <div class="card <%= colorarr[rand(0..4)]%>">
+            <div class="card-content white-text">
+                          <span class="card-title"><%= survey.name %>
+</span>
+            </div>
+              <div class="card-action">
+		
+		<% fl = 0 %>
+		<% @takenall.each do |taken| %>
+				<% if taken.user_id.eql?(@currentUser) and taken.survey_id.eql?(survey.id) %>
+							<% fl = 1 %>
+					<% break %>
+				<% end %>
+		<% end %>
+		<% if fl.eql?(0) %>
+		              <a href="#">Not Taken</a>
+              <%= link_to "Take Survey", takesurvey_path(survey.id) %>
+				<% else %>
+				<a href="#">Already Taken</a>
+			<%= link_to "See Answered", takesurvey_path(survey.id) %>
+		<% end %>
+            </div>
+          </div>
+        </div>
+
+<% end %>
+
+</div>
+<hr>
+<% if @currentAdmin  %>
+  <h4>Hello Admin</h4>
+      <table>
+        <thead>
+          <tr>
+              <th data-field="id">Name</th>
+              <th data-field="name">Link</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Manage Database</td>
+            <td><a href="/admin">Here</a></td>
+          </tr>
+          
+          <tr>
+            <td>Manage Surveys</td>
+            <td><a href="/surveys/">Here</a></td>
+          </tr>
+          
+          <tr>
+            <td>See Stats <i class="fa fa-bar-chart" aria-hidden="true"></i></td>
+            <td><a onmouseover="" style="cursor: pointer;" onclick="window.location.href= '/jsonout/index'">Here</a></td>
+          </tr>
+
+        </tbody>
+      </table>
+      <hr>
+
+<% end %>
+</div>
+</body>

@@ -1,0 +1,73 @@
+<script type="text/javascript">
+
+function drawChart(my_var) {
+    $.getJSON("http://localhost:3000/jsonout/question/"+ my_var +".json", function (json) { // callback function which gets called when your request completes. 
+        Morris.Donut({
+            element: my_var,
+            data: json // use returned data to plot the graph
+        });
+    });
+}
+
+</script>
+
+<!-- Must PUT ON TOP  -->
+
+<div class="container">
+<h1 class="center">Survey - <%= @survey.name %></h1>
+<h5>Number of Users - <%= @alreadytaken.size %></h5>
+
+<h5>Survey ID - <%= @survey.id %> </h5>
+            
+<% @survey.questions.each do |question| %>
+      <h4>Question - <%= question.content %></h4>
+            <% flag = 0 %>
+        <h5>Answers</h5>
+        <% question.answers.each do |answer| %>
+                <% count = 0 %>
+              <% if answer.content.split(':')[0] != "check" and answer.content.split(':')[0] != "radio" %>
+                <table class="highlight bordered responsive-table centered">
+                      <thead>
+                        <tr>
+                            <th><%= question.content %></th>
+                            <th>User Email</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+              <% end %>
+
+                  <% answer.responses.each do |response| %>
+                          <% if answer.content.split(':')[0] == "check" %>
+                                  <% flag = 1 %>
+                            <% if response.content.eql?("1")%>
+                                  <% count += 1 %>
+                            <% end %>
+                          <% elsif answer.content.split(':')[0] == "radio" %>
+                                  <% flag = 1 %>
+                            <% if response.content.eql?("1") %>
+                                    <% count += 1 %>
+                                <% end %>
+                          <% else %>
+                                    <tr>
+                                      <td><%= response.content %></td>
+                                      <td><%= response.user.email %></td>
+                                    </tr>
+                          <% end %>
+                  <% end %>
+                  <% if flag == 1 %>
+                  <%= answer.content.split(':').slice(1..-1).map(&:inspect).join(' ').to_s.gsub('"', '') %> - <%= count %><br>
+                  <% end %>
+
+              <% if answer.content.split(':')[0] != ("check" and "radio") %>
+                      </tbody>
+                      </table>
+              <% end %>
+
+        <% end %>
+            <% if flag == 1 %>
+                  <div id="<%= question.id %>"></div>
+                  <script type="text/javascript">drawChart('<%= question.id %>');</script>
+               <% flag = 0 %>
+            <% end %>
+<% end %>
+</div>

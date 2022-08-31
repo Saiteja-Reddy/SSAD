@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Surveys</title>
+    <%= csrf_meta_tags %>
+	<%= javascript_include_tag :defaults, "nested_form" %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+<style>
+      
+          .round-image-50 img {
+
+          border-radius: 25px;
+          -moz-border-radius: 25px;
+          -webkit-border-radius: 25px;
+          height: 50px;
+          width: 50px;
+          
+      }
+
+</style>
+
+  </head>
+
+  <body>
+
+
+<% if alert %>
+   <script>Materialize.toast('<%= alert %>', 4000)</script>
+   <% end %>
+
+
+
+  <nav>
+    <div class="nav-wrapper  light-blue darken-4">
+      <a href="/" class="brand-logo" style="padding-left:10px">MySurveys<i class="fa fa-pencil" aria-hidden="true"></i></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li><a onclick="window.history.back();">Back</a></li>
+<% if user_signed_in? %>
+ <li> <a>Logged in as <strong><%= current_user.email %></strong></a></li>
+  <li class="round-image-50"><a style="padding-top:10px;"><%= image_tag(current_user.avatar.url(:thumb)) %></a></li>
+  <li><%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> </li>
+  <li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %></li>
+<% else %>
+  <li><%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> </li>
+  <li><%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %></li>
+<% end %>
+      </ul>
+  </nav>
+        
+
+
+    <%= yield %>
+
+          <footer class="page-footer light-blue darken-4">
+        <div class="container">
+          <div class="row">
+            <div class="col l6 s12">
+              <h5 class="white-text">My Surveys</h5>
+              <p class="grey-text text-lighten-4">Made as an Assignment By Sai Teja Reddy Moolamalla</p>
+            </div>
+            <div class="col l4 offset-l2 s12">
+              <h5 class="white-text">Links</h5>
+              <ul>
+                <li><a class="grey-text text-lighten-3" href="#!">Home</a></li>
+              <% if user_signed_in? %>
+  <li class="grey-text text-lighten-3"> Logged in as <%= current_user.email %>.</li><br>
+  <li class="round-image-50"><%= image_tag(current_user.avatar.url(:thumb)) %></li><br>
+  <li><%= link_to 'Edit profile', edit_user_registration_path, :class => 'grey-text text-lighten-3' %> </li>
+  <li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'grey-text text-lighten-3'  %></li>
+  <% else %>
+  <li><%= link_to "Sign up", new_user_registration_path, :class => 'grey-text text-lighten-3'  %> </li>
+  <li><%= link_to "Login", new_user_session_path, :class => 'grey-text text-lighten-3'  %></li>
+  <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="footer-copyright">
+          <div class="container">
+          © 2016 Copyright
+          </div>
+        </div>
+      </footer>
+            
+  </body>
+</html>

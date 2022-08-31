@@ -1,0 +1,18 @@
+<style type="text/css">
+	.container 
+	{
+		overflow: hidden		
+	}
+</style>
+<div class="container">
+<h3>Users Grid</h3>
+
+<div class="left">
+  <%= datagrid_form_for @users_grid, url: users_path %>
+
+
+  <div class='total'>Total: <%= @users_grid.assets.total_count %></div>
+  <%= datagrid_table(@users_grid) %>
+  <%= paginate @users_grid.assets %>
+</div>
+</div>

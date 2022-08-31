@@ -1,0 +1,49 @@
+<%= nested_form_for @survey do |f| %>
+
+  <% if survey.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(survey.errors.count, "error") %> prohibited this survey from being saved:</h2>
+
+      <ul>
+      <% survey.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name , :placeholder => "Survey Name Here" %>
+  </div>
+
+<%= f.fields_for :questions do |qb| %>
+
+<div class="container">  <%= qb.text_field :content , :placeholder => "Question Here" %>
+
+
+          <%= qb.fields_for :answers do |qa| %>
+            <div class="container"> <%= qa.text_field :content , :placeholder => "Answer Here" %>
+
+             <div class="center" style="padding:10px"><%= qa.link_to_remove "Remove this answer",:class => 'waves-effect waves-light btn center' %><br></div>
+
+             </div>
+              
+          <% end %>
+          <br>
+           <div class="center"><%= qb.link_to_add "Add a answer", :answers ,:class => 'waves-effect waves-light btn center'%></div>
+          <br>
+                      </div>
+
+      <br>
+  <div class="center"><%= qb.link_to_remove "Remove this question",:class => 'waves-effect waves-light btn center' %></div>
+
+<% end %>
+<%= f.link_to_add "Add a question", :questions ,:class => 'waves-effect waves-light btn center'%>
+
+<br>
+
+  <div class="actions center">
+<%= f.submit "Submit", :class => 'red btn center' %>
+  </div>
+<% end %>

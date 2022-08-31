@@ -1,0 +1,165 @@
+<div class="container" >
+<% if @taken == 0 %>
+  
+  <div class="row">
+
+<%= nested_form_for @survey do |f| %>
+
+            
+
+  <div class="field">
+    <%= f.hidden_field :name %>
+    <h2 class="center"><%= f.object.name %></h2>
+  </div>
+
+<%= f.fields_for :questions do |qb| %>
+
+  <%= qb.hidden_field :content %>
+  
+
+        <div class="col s12 m6">
+          <div class="card  black">
+            <div class="card-content white-text">
+              <span class="card-title"> <%= qb.object.content %></span>
+
+      <% counta = -1 %>
+          <%= qb.fields_for :answers do |qa| %>
+            <%= qa.hidden_field :content %>
+                           <% counta += 1 %>         
+                  <%= qa.fields_for :responses do |qc| %>
+                  <%= qc.hidden_field :content %>
+                  <% end %>
+
+                  <%= qa.fields_for :responses ,Response.new do |qd| %>
+                      <% if qa.object.content.split(':')[0] == "check" %>
+                            
+
+    <input class="with-gap" name="a:<%= qb.object.id %>" type="checkbox" id="a:<%= qa.object.id %>r:<%= qd.object.id %>" onclick='getCheckedValue("a:<%= qb.object.id %>");' />
+        
+        <label for="a:<%= qa.object.id %>r:<%= qd.object.id %>"><%= qa.object.content.split(':').slice(1..-1).map(&:inspect).join(' ').to_s.gsub('"', '') %></label>
+
+            <%= qd.hidden_field :content , :value => 0 %>
+
+
+
+                      <% elsif qa.object.content.split(':')[0] == "radio"  %>
+
+    <input class="with-gap" name="a:<%= qb.object.id %>" type="radio" id="a:<%= qa.object.id %>r:<%= qd.object.id %>" onclick='getCheckedValue("a:<%= qb.object.id %>");' />
+        
+        <label for="a:<%= qa.object.id %>r:<%= qd.object.id %>"><%= qa.object.content.split(':').slice(1..-1).map(&:inspect).join(' ').to_s.gsub('"', '') %></label>
+
+            <%= qd.hidden_field :content , :value => 0 %>
+
+                          
+                      <% else %>
+                            
+                            <%= qd.text_field :content , :placeholder => "Enter Here"%>
+
+                      <% end %>
+                      <%= qd.hidden_field :user_id , :value => @currentUser %>
+                  <% end %>
+                  <br>
+          <% end %>
+
+            </div>
+          </div>
+        </div>
+
+<% end %>
+
+  <div class="center"> 
+<%= f.submit 'Submit', :class => 'waves-effect waves-light btn-large' %>
+  </div>
+<% end %>
+<br>
+
+</div>
+
+<% else %>
+
+<h4 class="center"> You have already taken this Survey </h4>
+<h3 class="center"><%= @survey.name %></h3><br>
+<div class="row">
+<% @survey.questions.each do |question| %>
+       
+        <div class="col s12 m6">
+          <div class="card  black">
+            <div class="card-content white-text">
+              <span class="card-title"> <%= question.content %></span><br>
+
+        <% question.answers.each do |answer| %>
+                  <% answer.responses.each do |response| %>
+                          <% if answer.content.split(':')[0] == "check" %>
+
+                            <% if response.user_id.eql?(@currentUser) and response.content.eql?("1")%>
+                                
+                                  <p>   <%= answer.content.split(':').slice(1..-1).map(&:inspect).join(' ').to_s.gsub('"', '') %></p>
+                                <% end %>
+                          <% elsif answer.content.split(':')[0] == "radio" %>
+                            <% if response.user_id.eql?(@currentUser) and response.content.eql?("1")%>
+                                
+                                    <p> <%= answer.content.split(':').slice(1..-1).map(&:inspect).join(' ').to_s.gsub('"', '') %></p>
+                                <% end %>
+                          <% else %>
+                               <% if response.user_id.eql?(@currentUser) %>
+                                <p>      <%= response.content %></p>
+                                <% end %>
+                          <% end %>
+                  <% end %>
+        <% end %>
+
+          </div>
+          </div>
+          </div>
+
+<% end %>
+</div>
+<% end %>
+<h5 class="center">All Users Attempts  - <%= @alreadytaken.size %> </h5>
+
+</div>
+
+<script>
+
+function myFunction(val) {
+
+    var x = document.getElementById(val).nextElementSibling;
+    var y = x.nextElementSibling;
+    /*alert(y.id)*/
+    if ( y.value == 0 )
+      y.value = 1
+    else
+      y.value = 0;  
+
+  }
+
+  function myFunction1(val) {
+
+    var x = document.getElementById(val).nextElementSibling;
+    var y = x.nextElementSibling;
+    /*alert(y.id)*/
+      y.value = 1
+  }
+
+  function myFunction2(val) {
+
+    var x = document.getElementById(val).nextElementSibling;
+    var y = x.nextElementSibling;
+    /*alert(y.id)*/
+      y.value = 0
+  }
+
+  function getCheckedValue( groupName ) {
+
+    var radios = document.getElementsByName( groupName );
+    for( i = 0; i < radios.length; i++ ) {
+        if( radios[i].checked ) {
+            myFunction1(radios[i].id);
+        }
+        else
+        {
+          myFunction2(radios[i].id);
+        }
+    }
+  }
+</script>

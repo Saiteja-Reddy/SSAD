@@ -1,0 +1,49 @@
+<script type="text/javascript">
+
+function drawChart() {
+    $.getJSON("http://localhost:3000/jsonout/showall.json", function (json) { // callback function which gets called when your request completes. 
+        new Morris.Bar ({
+   element: 'survey_chart',
+
+    data: json,
+    xkey: 'SurveyName',
+    ykeys: ['SurveyCount'],
+    labels: ['Count'],
+});
+    });
+}
+
+</script>
+
+<!-- Must PUT ON TOP  -->
+<% colorarr = ["blue-grey darken-1","black","red accent-2","deep-purple accent-4","brown darken-1"] %>
+
+<body onload="drawChart()">
+	<div class="container">
+
+    <h1 class="center">Graph</h1>
+       <div id="survey_chart"></div>
+        
+        <h2 class="center">Detailed Stats</h2><br>
+
+          <div class="row">
+
+            <% @surveys.each do |survey| %>
+                       <div class="col s12 m6">
+          <div class="card <%= colorarr[rand(0..4)]%>">
+                 <div class="card-content white-text">
+                      <span class="card-title"><%= survey.name %></span>
+            </div>
+            <div class="card-action">
+            <%= link_to "See Stats" , stats_path(survey.id) %>
+            </div>
+          </div>
+          </div>
+               
+
+            <% end %>
+            </div>
+
+       </div>
+
+</body>
